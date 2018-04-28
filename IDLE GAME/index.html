@@ -11,23 +11,30 @@
 </head>
 <body>
     <div id="gamePage" onclick="goldClick()">
-    Gold: <span id="gold">0</span>
-    <br />
-    <br />
-    <button onClick="buyFarm()">Buy Farms</button>
-    <b>Farms:</b> <span id="farms">0</span>
-    &nbsp <b>Farm Cost: </b><span id="farmCost">10</span>
-    &nbsp <b>Production:</b><span id="farmProduction">
+    Gold: <span id="gold">0</span> &nbsp; <b>Total Production: </b><span id="totalProduction">0</span>
     <br />
     <br />
 
-    <button onclick="buyBlacksmiths">Buy Blacksmiths</button>
+    <div id="buildings">
+    <button onClick="buyBuilding(game.farms)">Buy Farms</button>
+    <b>Farms:</b> <span id="farms">0</span>
+    &nbsp; <b>Farm Cost: </b><span id="farmCost">10</span>
+    &nbsp; <b>Production: </b><span id="farmProduction">0</span>
     <br />
+    <br />
+
+    <button onClick="buyBuilding(game.inns)">Buy Inns</button>
+    <b>Inns:</b> <span id="inns">0</span>
+    &nbsp; <b>Inn Cost: </b><span id="innCost">125</span>
+    &nbsp; <b>Production: </b><span id="InnProduction">0</span>
+    <br />
+    </div>
 
     <button onclick="test()">Test</button>
     <br />
     <br />
 
+    <div id="factionCoins">
     <b>Angel Coins: </b><span id="angelCoins">0</span>
     <br />
     <b>Fairy Coins: </b><span id="fairyCoins">0</span>
@@ -40,6 +47,7 @@
     <br />
     <b>Goblin Coins: </b><span id="goblinCoins">0</span>
     <br />
+    </div>
 
     </div>
 </body>
