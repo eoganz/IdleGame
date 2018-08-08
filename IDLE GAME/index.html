@@ -10,45 +10,88 @@
     <title>Realm Destroyer</title>
 </head>
 <body>
+    <h1>Realm Destroyer</h1>
+    
+    
     <div id="gamePage" onclick="goldClick()">
-    Gold: <span id="gold">0</span> &nbsp; <b>Total Production: </b><span id="totalProduction">0</span>
-    <br />
-    <br />
+        
+        <h2><b>Gold: </b><span id="gold">0</span> &nbsp; <b>Total Production: </b><span id="totalProduction">0</span></h2>
+        <br />
+        <br />
+        
+
 
     <div id="buildings">
-    <button onClick="buyBuilding(game.farms)">Buy Farms</button>
-    <b>Farms:</b> <span id="farms">0</span>
-    &nbsp; <b>Farm Cost: </b><span id="farmCost">10</span>
-    &nbsp; <b>Production: </b><span id="farmProduction">0</span>
-    <br />
-    <br />
+        <button onClick="buyBuilding(game.farms)">Buy Farms</button>
+        
+        <div id="buildingInfo">
+                <b>Farms: </b><span id="farms">0</span>
+                <b>Farm Cost: </b><span id="farmCost">10</span>
+                <b>Production: </b><span id="farmProduction">0</span>
 
-    <button onClick="buyBuilding(game.inns)">Buy Inns</button>
-    <b>Inns:</b> <span id="inns">0</span>
-    &nbsp; <b>Inn Cost: </b><span id="innCost">125</span>
-    &nbsp; <b>Production: </b><span id="InnProduction">0</span>
-    <br />
-    </div>
+        </div>
+    
 
-    <button onclick="test()">Test</button>
-    <br />
-    <br />
 
-    <div id="factionCoins">
-    <b>Angel Coins: </b><span id="angelCoins">0</span>
-    <br />
-    <b>Fairy Coins: </b><span id="fairyCoins">0</span>
-    <br />
-    <b>Elf Coins: </b><span id="elfCoins">0</span>
-    <br />
-    <b>Demon Coins: </b><span id="demonCoins">0</span>
-    <br />
-    <b>Undead Coins: </b><span id="undeadCoins">0</span>
-    <br />
-    <b>Goblin Coins: </b><span id="goblinCoins">0</span>
-    <br />
-    </div>
+        <button onClick="buyBuilding(game.inns)">Buy Inns</button>
+
+        <div id="buildingInfo">
+                <b>Inns:</b> <span id="inns">0</span>
+                <b>Inn Cost: </b><span id="innCost">125</span>
+                <b>Production: </b><span id="innProduction">0</span>
+
+        </div>
+    
+
+
+
+        <button onClick="buyBuilding(game.blacksmiths)">Buy Blacksmiths</button>
+
+        <div id="buildingInfo">
+                <b>Blacksmiths:</b> <span id="blacksmiths">0</span>
+                <b>Blacksmiths Cost: </b><span id="blacksmithCost">600</span>
+                <b>Production: </b><span id="blacksmithProduction">0</span>
+        </div>
 
     </div>
+
+    <div id="upgrades">
+        <h3>Upgrades</h3>
+    
+    </div>
+
+        <div id="factionCoins">
+
+                <b>Angel Coins: </b><span id="angelCoins">0</span>
+                <br />
+                <b>Fairy Coins: </b><span id="fairyCoins">0</span>
+                <br />
+                <b>Elf Coins: </b><span id="elfCoins">0</span>
+                <br />
+                <b>Demon Coins: </b><span id="demonCoins">0</span>
+                <br />
+                <b>Undead Coins: </b><span id="undeadCoins">0</span>
+                <br />
+                <b>Goblin Coins: </b><span id="goblinCoins">0</span>
+                <br />
+                </div>
+
+        <div id="gameStateButtons">
+                    
+            <button onclick="saveGame(game)">Save</button>
+    
+            <button onclick="loadSave()">Load Last Save</button>
+
+            <button onclick="clearSave()">Clear Save</button>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
 </body>
 </html>

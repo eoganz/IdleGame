@@ -2,10 +2,11 @@ var Game = (function () {
     function Game() {
         this.gold = 0;
         this.clickGold = 1;
-        this.tickSpeed = 1000;
+        this.tickspeed = 1000;
         this.assistants = 0;
-        this.factionFindChance = 10;
         this.buildingCount = 0;
+        this.totalProduction = 0;
+        this.factionFindChance = 10;
         this.factionCoins = new Array(0, 0, 0, 0, 0, 0);
         this.farms = new Array(10, 0, 2);
         this.inns = new Array(125, 0, 6);
@@ -14,8 +15,20 @@ var Game = (function () {
     return Game;
 }());
 $(function () {
+    if (localStorage.getItem("game") === null) {
+        game = new Game();
+    }
+    else {
+        game = JSON.parse(localStorage.getItem("game"));
+        updateGame();
+    }
+    window.setInterval(function () {
+        if (game.buildingCount > 0) {
+            buildingTick(game.totalProduction);
+        }
+    }, game.tickspeed);
 });
-var game = new Game();
+var game;
 function goldClick() {
     game.gold += game.clickGold;
     var clickChance = Math.floor((Math.random() * 100) + 1);
@@ -34,20 +47,11 @@ function buyBuilding(building) {
         building[1] += 1;
         game.gold -= building[0];
         game.buildingCount += 1;
-        building[0] = Math.floor(building[0] * Math.pow(1.12, building[1]));
+        game.totalProduction += building[2];
+        building[0] = Math.floor(building[0] * Math.pow(1.1, building[1]));
     }
     updateGame();
 }
-function test() {
-    console.log(game.factionCoins);
-    console.log(game.farms);
-}
-window.setInterval(function () {
-    var totalProd = getTotalProduction();
-    if (totalProd > 0) {
-        buildingTick(totalProd);
-    }
-}, game.tickSpeed);
 function updateFactionCoins() {
     $('#angelCoins').text(game.factionCoins[0]);
     $('#fairyCoins').text(game.factionCoins[1]);
@@ -64,23 +68,30 @@ function updateAllBuildings() {
     $('#farmCost').text(game.farms[0]);
     $('#farmProduction').text(game.farms[2] * game.farms[1]);
     $('#inns').text(game.inns[1]);
-    $('#innsCost').text(game.inns[0]);
-    $('innProduction').text(game.inns[2] * game.inns[1]);
+    $('#innCost').text(game.inns[0]);
+    $('#innProduction').text(game.inns[2] * game.inns[1]);
+    $('#blacksmiths').text(game.blacksmiths[1]);
+    $('#blacksmithCost').text(game.blacksmiths[0]);
+    $('#blacksmithProduction').text(game.blacksmiths[2] * game.blacksmiths[1]);
 }
 function updateGame() {
     updateFactionCoins();
     updateGold();
     updateAllBuildings();
-    var totalProduction = getTotalProduction();
-    $('#totalProduction').text(totalProduction);
+    $('#totalProduction').text(game.totalProduction);
 }
-function getTotalProduction() {
-    var totalProd = 0;
-    if (game.farms[1] > 0) {
-        totalProd += game.farms[2] * game.farms[1];
+function saveGame(gameState) {
+    localStorage.setItem("game", JSON.stringify(gameState));
+}
+function clearSave() {
+    localStorage.clear();
+}
+function loadSave() {
+    if (JSON.parse(localStorage.getItem("game")) === null) {
+        alert("You don't have a save to load!");
     }
-    if (game.inns[1] > 0) {
-        totalProd += game.inns[2] * game.inns[1];
+    else {
+        game = JSON.parse(localStorage.getItem("game"));
+        updateGame();
     }
-    return totalProd;
 }

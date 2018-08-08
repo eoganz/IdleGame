@@ -2,12 +2,15 @@ class Game
 {
     gold:number = 0;
     clickGold:number = 1;
-    tickSpeed:number = 1000;
+    tickspeed:number = 1000;
     assistants:number = 0;
 
-    //percent as whole number
-    factionFindChance:number = 10; 
     buildingCount:number = 0;
+    totalProduction:number = 0;
+
+    //percent as whole number
+    factionFindChance:number = 10;
+    //Angel, Fairy, Elf, Demon, Undead, Goblin
     factionCoins:number[] = new Array(0,0,0,0,0,0);
 
     //Cost, amount, basePower
@@ -16,12 +19,37 @@ class Game
     blacksmiths:number[] = new Array(600, 0, 20);
 }
 
+/**
+ * On load event
+ * 
+ */
 $(function(){
+    if(localStorage.getItem("game") === null)
+    {
+        game = new Game();
+    }
+    else
+    {
+        game = JSON.parse(localStorage.getItem("game"));
+        updateGame();
+    }
+
+    
+    //Tick every ( game.tickspeed ) ms
+    window.setInterval(function(){
+        if (game.buildingCount > 0)
+        {
+            buildingTick(game.totalProduction);
+        }
+    }, game.tickspeed);
 
 });
+ 
+let game;
 
-let game = new Game();
-
+/**
+ * Adds gold equal to game.clickDamage
+ */
 //TO-DO Find better algorithm to finding and deciding factiong coins.
 function goldClick()
 {
@@ -33,18 +61,25 @@ function goldClick()
     {
         game.factionCoins[coinDecider] += 1;
     }
-
     updateGame();
 }
 
-//Ticks building production ( game.tickspeed ) ms
+/**
+ * Ticks building production ( game.tickspeed ) ms
+ * @param buildingProduction Total production from all buildings
+ * @event updateGame() Updates game after updating gold and faction coins
+ */
 function buildingTick(buildingProduction:number)
 {
     game.gold += buildingProduction;
     updateGame();
 }
-
-//Buy farms function
+/**
+ * Buy 1 building of whichever is passed in.
+ * @param building Which building you are trying to buy.
+ * @event updateGame() Updates game after updating buildings and gold.
+ */
+//Buy buildings function
 function buyBuilding(building)
 {
     if (game.gold > building[0])
@@ -52,27 +87,12 @@ function buyBuilding(building)
         building[1] += 1;
         game.gold -= building[0];
         game.buildingCount+= 1;
+        game.totalProduction += building[2];
         
-        building[0] = Math.floor(building[0] * Math.pow(1.12, building[1]));
+        building[0] = Math.floor(building[0] * Math.pow(1.1, building[1]));
     }
     updateGame();
 }
-
-//Test for displaying game.factionCoins to compare to HTML
-function test()
-{
-    console.log(game.factionCoins);
-    console.log(game.farms);
-}
-
-//Tick every ( game.tickspeed ) ms
-window.setInterval(function(){
-    let totalProd = getTotalProduction();
-    if (totalProd > 0)
-    {
-        buildingTick(totalProd);
-    }
-}, game.tickSpeed);
 
 //Updates faction coins <Span> tags
 function updateFactionCoins()
@@ -97,8 +117,11 @@ function updateAllBuildings()
         $('#farmCost').text(game.farms[0]);
         $('#farmProduction').text(game.farms[2] * game.farms[1]);
     $('#inns').text(game.inns[1]);
-        $('#innsCost').text(game.inns[0]);
-        $('innProduction').text(game.inns[2] * game.inns[1]);
+        $('#innCost').text(game.inns[0]);
+        $('#innProduction').text(game.inns[2] * game.inns[1]);
+    $('#blacksmiths').text(game.blacksmiths[1]);
+        $('#blacksmithCost').text(game.blacksmiths[0]);
+        $('#blacksmithProduction').text(game.blacksmiths[2] * game.blacksmiths[1]);
 }
 
 function updateGame()
@@ -107,20 +130,30 @@ function updateGame()
     updateGold();
     updateAllBuildings();
 
-    let totalProduction = getTotalProduction();
-    $('#totalProduction').text(totalProduction);
+    $('#totalProduction').text(game.totalProduction);
 }
 
-function getTotalProduction():number
+
+function saveGame(gameState:object)
 {
-    let totalProd = 0;
-    if(game.farms[1] > 0)
+    localStorage.setItem("game",JSON.stringify(gameState));
+
+}
+
+function clearSave()
+{
+    localStorage.clear();
+}
+
+function loadSave()
+{
+    if(JSON.parse(localStorage.getItem("game")) === null)
     {
-        totalProd += game.farms[2] * game.farms[1];
+        alert("You don't have a save to load!");
     }
-    if(game.inns[1] > 0)
+    else
     {
-        totalProd += game.inns[2] * game.inns[1];
+        game = JSON.parse(localStorage.getItem("game"));
+        updateGame();
     }
-    return totalProd;
 }
